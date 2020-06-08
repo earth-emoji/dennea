@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Late-August</title>
+    <link rel="stylesheet" href="{% static 'pkgs/semantic/semantic.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/utils.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {% block styles %}{% endblock styles %}
+    {% block extra %}{% endblock extra %}
+</head>
+<body>
+    {% include 'partials/base/_navbar.html' %}
+
+    <div class="ui main fluid container">
+
+        <div class="ui text container">
+            {% include 'partials/_messages.html' %}
+        </div>
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+    {% include 'partials/base/_footer.html' %}
+    <script src="{% static 'pkgs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'pkgs/semantic/semantic.min.js' %}"></script>
+    <script src="{% static 'js/ajaxCRUD.js' %}"></script>
+    {% block javascript %}{% endblock javascript %}
+</body>
+</html>

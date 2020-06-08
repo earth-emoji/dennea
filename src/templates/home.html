@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>Late-August</title>
+  <!--<link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>-->
+  <link rel="stylesheet" href="{% static 'pkgs/semantic/semantic.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/utils.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+  {% block styles %}{% endblock styles %}
+</head>
+<body>
+
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="active item">Home</a>
+    <a class="item">About</a>
+    <a class="item">Contact</a>
+    <div class="right menu">
+      <div class="item">
+        <a href="{% url 'login' %}" class="ui button">Log in</a>
+      </div>
+      <div class="item">
+        <a href="{% url 'user_signup' %}" class="ui viking button">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+    <a class="active item">Home</a>
+    <a class="item">About</a>
+    <a class="item">Contact</a>
+    <a href="{% url 'login' %}" class="item">Login</a>
+    <a href="{% url 'user_signup' %}" class="item">Signup</a>
+</div>
+
+{% block content %}
+{% endblock content %}
+
+<script src="{% static 'pkgs/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'pkgs/semantic/semantic.min.js' %}"></script>
+
+<script>
+    $(document)
+      .ready(function() {
+  
+        // fix menu when passed
+        $('.masthead')
+          .visibility({
+            once: false,
+            onBottomPassed: function() {
+              $('.fixed.menu').transition('fade in');
+            },
+            onBottomPassedReverse: function() {
+              $('.fixed.menu').transition('fade out');
+            }
+          });
+  
+        // create sidebar and attach to menu open
+        $('.ui.sidebar')
+          .sidebar('attach events', '.toc.item');
+      });
+    </script>
+    {% block javascript %}{% endblock javascript %}
+</body>
+
+</html>

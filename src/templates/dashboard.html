@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>August</title>
+    <link rel="stylesheet" href="{% static 'pkgs/semantic/semantic.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/utils.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    {% block styles %}{% endblock styles %}
+</head>
+<body id="root">
+    <div class="ui tablet computer only padded grid">
+      <div class="ui black-russian borderless top fixed fluid menu">
+        <a class="header item"> 
+            <img class="logo" src="{% static 'images/logo.png' %}" />
+            &nbsp; Late-August
+        </a>
+        <div class="right menu">
+          <div class="item">
+            <div class="ui small input"><input placeholder="Search..."></div>
+          </div>
+          <a class="item" href="{% url 'logout' %}">Logout</a>
+          <a class="item">Settings</a>
+          <a class="item">Profile</a> 
+          <a class="item">Help</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui mobile only padded grid">
+      <div class="ui top fixed borderless fluid inverted menu">
+        <a class="header item">Project Name</a>
+        <div class="right menu">
+          <div class="item">
+            <button class="ui icon toggle basic inverted button">
+              <i class="content icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="ui vertical borderless inverted fluid menu">
+          <a class="item">Dashboard</a> <a class="item">Settings</a>
+          <a class="item">Profile</a> <a class="item">Help</a>
+          <div class="ui fitted divider"></div>
+          <div class="item">
+            <div class="ui small input"><input placeholder="Search..."></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui padded grid">
+      {% include 'partials/dash/_sidebar.html' %}
+      <div class="sixteen wide mobile thirteen wide tablet thirteen wide computer right floated column" id="content">
+
+        <div class="ui container">
+            <div class="ui padded grid">
+                <div class="row">
+                    {% include 'partials/_messages.html' %}
+                </div>
+            </div>
+        </div>
+
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
+    <script src="{% static 'pkgs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'pkgs/semantic/semantic.min.js' %}"></script>
+    {% block javascript %}{% endblock javascript %}
+</body>
+</html>

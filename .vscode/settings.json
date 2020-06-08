@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": ".env/bin/python",
+    "python.jediEnabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django"
+    ],
+    "editor.renderWhitespace": "boundary",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
