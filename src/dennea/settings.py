@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'accounts',
     'pages',
     'error_pages',
+    'photos',
+    'catalog',
 ]
 
 MIDDLEWARE = [
