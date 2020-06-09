@@ -1,0 +1,38 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="ui container">
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <h1 class="ui header">Create Product</div>
+
+            <form class="ui large container form" method="POST" novalidate>
+                {% csrf_token %}
+                <div class="field">
+                    {{ form.name.errors }}
+                    <label for="{{ form.name.id_for_label }}">Name:</label>
+                    {{ form.name }}
+                </div>
+                <div class="field">
+                    {{ form.description.errors }}
+                    <label for="{{ form.description.id_for_label }}">Description:</label>
+                    {{ form.description }}
+                </div>
+                <div class="field">
+                    {{ form.price.errors }}
+                    <label for="{{ form.price.id_for_label }}">Price:</label>
+                    {{ form.price }}
+                </div>
+                <div class="field">
+                    {{ form.stock_quantity.errors }}
+                    <label for="{{ form.stock_quantity.id_for_label }}">Stock Quantity:</label>
+                    {{ form.stock_quantity }}
+                </div>
+                <button class="ui teal button" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

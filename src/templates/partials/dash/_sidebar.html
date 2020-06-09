@@ -1,7 +1,7 @@
 <div class="three wide tablet only three wide computer only column" id="sidebar">
     <div class="ui black-russian vertical borderless fluid text menu">
         <a class="active item">Overview</a> 
-        <a href="#" class="item">Jobs</a>
+        <a href="{% url 'products:vendor-products' request.user.vendor.slug %}" class="item">Products</a>
         <a href="#" class="item">Orders</a> 
         <a class="item">Export</a>
         <div class="ui hidden divider"></div>

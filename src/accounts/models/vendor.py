@@ -44,6 +44,9 @@ class Vendor(models.Model):
     def __str__(self):
         return self.user.email
 
+    def get_products(self):
+        return self.products.order_by('-created_at')
+
     def save(self, *args, **kwargs):
         today = datetime.today()
         title_slugified = slugify(self.get_company_name)

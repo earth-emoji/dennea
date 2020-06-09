@@ -17,7 +17,7 @@ class Product(models.Model):
     album = models.OneToOneField(Album, on_delete=models.CASCADE, related_name='product', null=True, blank=True)
     vendor = models.ForeignKey(Vendor, related_name='products', on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, related_name='products', blank=True)
-    acl = models.ForeignKey(Acl, related_name='products', on_delete=models.DO_NOTHING, null=True, blank=True)
+    acl = models.ForeignKey(Acl, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     is_aux = models.BooleanField(default=False)
     stock_quantity = models.PositiveIntegerField(default=0, blank=True)
     low_stock = models.BooleanField(default=False)
@@ -37,7 +37,7 @@ class Product(models.Model):
     is_free = models.BooleanField(default=False)
     call_for_price = models.BooleanField(default=False)
     weight = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
-    lenght = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    length = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     width = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     height = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     sold = models.PositiveIntegerField(null=True, blank=True)
@@ -60,6 +60,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("products:product-details", kwargs={"slug": self.slug})
+
+    def get_price_url(self):
+        return reverse("products:product-price", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
         today = datetime.today()
@@ -119,7 +125,6 @@ class ProductAttribute(models.Model):
     slug = models.SlugField(max_length=80, unique=True, blank=True)
     name = models.CharField(max_length=255)
     is_aux = models.BooleanField(default=False)
-    products = models.ManyToManyField(Product, related_name='attributes', blank=True)
 
     class Meta:
         verbose_name = 'product attribute'
@@ -138,6 +143,7 @@ class ProductAttributeValue(models.Model):
     slug = models.SlugField(max_length=80, unique=True, blank=True)
     name = models.CharField(max_length=255)
     attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, related_name='values')
+    products = models.ManyToManyField(Product, related_name='attributes', blank=True)
 
     class Meta:
         verbose_name = 'product attribute value'
