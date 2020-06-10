@@ -8,72 +8,10 @@
             <h1 class="ui header">{{ product.name }}</div>
 
             <div class="ui top attached tabular menu">
-                <a href="{{ product.get_absolute_url }}" class="active item" data-tab="first">Details</a>
-                <a href="{{ product.get_price_url }}"  class="item" data-tab="second">Price</a>
-                <a class="item" data-tab="third">Dimensions</a>
+                {% include 'products/_tab_headers.html' with details=True %}
             </div>
             <div class="ui bottom attached active tab segment" data-tab="first">
-                <form class="ui large container form" method="POST" novalidate>
-                    {% csrf_token %}
-                    <div class="field">
-                        {{ form.name.errors }}
-                        <label for="{{ form.name.id_for_label }}">Name:</label>
-                        {{ form.name }}
-                    </div>
-                    <div class="field">
-                        {{ form.description.errors }}
-                        <label for="{{ form.description.id_for_label }}">Description:</label>
-                        {{ form.description }}
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.published.errors }}
-                            {{ form.published }}
-                            <label for="{{ form.published.id_for_label }}">Published</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.mark_as_new.errors }}
-                            {{ form.mark_as_new }}
-                            <label for="{{ form.mark_as_new.id_for_label }}">Mark as new</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.not_returnable.errors }}
-                            {{ form.not_returnable }}
-                            <label for="{{ form.not_returnable.id_for_label }}">Returnable</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.show_on_homepage.errors }}
-                            {{ form.show_on_homepage }}
-                            <label for="{{ form.show_on_homepage.id_for_label }}">Show on home page</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.featured.errors }}
-                            {{ form.featured }}
-                            <label for="{{ form.featured.id_for_label }}">Featured</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            {{ form.allow_reviews.errors }}
-                            {{ form.allow_reviews }}
-                            <label for="{{ form.allow_reviews.id_for_label }}">Allow reviews</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        {{ form.vendor_comments.errors }}
-                        <label for="{{ form.vendor_comments.id_for_label }}">Vendor Comments:</label>
-                        {{ form.vendor_comments }}
-                    </div>
-                    <button class="ui teal button" type="submit">Submit</button>
-                </form>
+                {% include 'products/_details_form.html' %}
             </div>
             <div class="ui bottom attached tab segment" data-tab="second">
                 Second

@@ -1,0 +1,21 @@
+<form id="attr-form" class="ui large container form" method="POST" novalidate action="{{ product.set_attribute_url }}">
+    {% csrf_token %}
+    {% for attr in attributes %}
+        <h5>{{ attr.name }}</h5>
+        <div class="ten fields">
+        {% for val in attr.values.all %}
+            <div class="field">
+                <div class="ui checkbox">
+                    {% if val in product.attributes.all %}
+                        <input name="attribute_values" value="{{ val.pk }}" type="checkbox" tabindex="0" class="hidden" checked>
+                    {% else %}
+                        <input name="attribute_values" value="{{ val.pk }}" type="checkbox" tabindex="0" class="hidden">
+                    {% endif %}
+                    <label>{{ val.name }}</label>
+                </div>
+            </div>
+        {% endfor %}
+       </div>
+    {% endfor %}
+    <button class="ui teal button" type="submit">Submit</button>
+</form>

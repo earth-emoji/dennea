@@ -1,0 +1,64 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="ui container">
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <h1 class="ui header">{{ product.name }}</div>
+
+            <div class="ui top attached tabular menu">
+                {% include 'products/_tab_headers.html' with attribute=True %}
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="first">
+                First
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="second">
+                Second
+            </div>
+            <div class="ui bottom attached tab active segment" data-tab="third">
+                <div class="ui positive hidden message">
+                    <i class="close icon"></i>
+                    <p id="results"></p>
+                </div>
+                {% include 'products/_attribute_form.html' %}
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="fourth">
+                Fourth
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('.ui.checkbox').checkbox();
+
+        $("#attr-form").on("submit", function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                data: $(this).serialize(),
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                success: function(response) {
+                    if(response['success']) {
+                        console.log(response);
+                        $("#results").html(response["message"]);
+                        $(".ui.positive.message").removeClass("hidden");
+                        $(".ui.positive.message").addClass("visible");
+                    }
+                    if(response['error']) {
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock javascript %}

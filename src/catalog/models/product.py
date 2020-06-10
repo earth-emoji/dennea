@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from django.db import models
 from django.shortcuts import reverse
@@ -9,6 +10,42 @@ from users.models import Acl
 
 from catalog.models import Category
 
+class ProductAttribute(models.Model):
+    slug = models.SlugField(max_length=80, unique=True, blank=True)
+    name = models.CharField(max_length=255)
+    is_aux = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'product attribute'
+        verbose_name_plural = 'product attributes'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        today = datetime.today()
+        title_slugified = slugify(self.name)
+        self.slug = f'{today:%Y%m%d%M%S}-{title_slugified}'
+        super().save(*args, **kwargs)
+
+class PredefineAttributeValue(models.Model):
+    slug = models.SlugField(max_length=80, unique=True, blank=True)
+    name = models.CharField(max_length=255)
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, related_name='values')
+
+    class Meta:
+        verbose_name = 'predefined attribute value'
+        verbose_name_plural = 'predefined attribute values'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        today = datetime.today()
+        title_slugified = slugify(self.name)
+        self.slug = f'{today:%Y%m%d%M%S}-{title_slugified}'
+        super().save(*args, **kwargs)
+
 class Product(models.Model):
     slug = models.SlugField(max_length=80, unique=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='variations', on_delete=models.CASCADE)
@@ -17,6 +54,7 @@ class Product(models.Model):
     album = models.OneToOneField(Album, on_delete=models.CASCADE, related_name='product', null=True, blank=True)
     vendor = models.ForeignKey(Vendor, related_name='products', on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, related_name='products', blank=True)
+    attributes = models.ManyToManyField(PredefineAttributeValue, related_name='products', blank=True)
     acl = models.ForeignKey(Acl, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     is_aux = models.BooleanField(default=False)
     stock_quantity = models.PositiveIntegerField(default=0, blank=True)
@@ -67,6 +105,12 @@ class Product(models.Model):
     def get_price_url(self):
         return reverse("products:product-price", kwargs={"slug": self.slug})
 
+    def set_attribute_url(self):
+        return reverse("products:set-attribute", kwargs={"slug": self.slug})
+
+    def get_attribute_url(self):
+        return reverse("products:product-attribute", kwargs={"slug": self.slug})
+
     def save(self, *args, **kwargs):
         today = datetime.today()
         title_slugified = slugify(self.name)
@@ -111,43 +155,6 @@ class ProductBundle(models.Model):
     class Meta:
         verbose_name = 'product bundle'
         verbose_name_plural = 'product bundles'
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        today = datetime.today()
-        title_slugified = slugify(self.name)
-        self.slug = f'{today:%Y%m%d%M%S}-{title_slugified}'
-        super().save(*args, **kwargs)
-
-class ProductAttribute(models.Model):
-    slug = models.SlugField(max_length=80, unique=True, blank=True)
-    name = models.CharField(max_length=255)
-    is_aux = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = 'product attribute'
-        verbose_name_plural = 'product attributes'
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        today = datetime.today()
-        title_slugified = slugify(self.name)
-        self.slug = f'{today:%Y%m%d%M%S}-{title_slugified}'
-        super().save(*args, **kwargs)
-
-class ProductAttributeValue(models.Model):
-    slug = models.SlugField(max_length=80, unique=True, blank=True)
-    name = models.CharField(max_length=255)
-    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, related_name='values')
-    products = models.ManyToManyField(Product, related_name='attributes', blank=True)
-
-    class Meta:
-        verbose_name = 'product attribute value'
-        verbose_name_plural = 'product attribute value'
 
     def __str__(self):
         return self.name

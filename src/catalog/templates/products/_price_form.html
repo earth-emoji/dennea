@@ -1,0 +1,36 @@
+<form class="ui large container form" method="POST" novalidate>
+    {% csrf_token %}
+    <div class="field">
+        {{ form.price.errors }}
+        <label for="{{ form.price.id_for_label }}">Price:</label>
+        {{ form.price }}
+    </div>
+    <div class="field">
+        <div class="ui checkbox">
+            {{ form.on_sale.errors }}
+            {{ form.on_sale }}
+            <label for="{{ form.on_sale.id_for_label }}">On Sale</label>
+        </div>
+    </div>
+    <div class="field">
+        {{ form.sales_rate.errors }}
+        <label for="{{ form.sales_rate.id_for_label }}">Sales Rate:</label>
+        {{ form.sales_rate }}
+    </div>
+    
+    <div class="field">
+        <div class="ui checkbox">
+            {{ form.is_free.errors }}
+            {{ form.is_free }}
+            <label for="{{ form.is_free.id_for_label }}">Mark as new</label>
+        </div>
+    </div>
+    <div class="field">
+        <div class="ui checkbox">
+            {{ form.call_for_price.errors }}
+            {{ form.call_for_price }}
+            <label for="{{ form.call_for_price.id_for_label }}">Returnable</label>
+        </div>
+    </div>
+    <button class="ui teal button" type="submit">Submit</button>
+</form>

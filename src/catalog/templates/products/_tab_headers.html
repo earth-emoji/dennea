@@ -1,0 +1,4 @@
+<a href="{{ product.get_absolute_url }}" {% if details %}class="active item"{% else %}class="item"{% endif %} data-tab="first">Details</a>
+<a href="{{ product.get_price_url }}" {% if price %}class="active item"{% else %}class="item"{% endif %} data-tab="second">Price</a>
+<a href="{{ product.get_attribute_url }}" {% if attribute %}class="active item"{% else %}class="item"{% endif %} data-tab="third">Attributes</a>
+<a class="item" data-tab="fourth">Dimensions</a>

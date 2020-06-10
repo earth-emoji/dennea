@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 
 from accounts.models import Vendor
@@ -7,9 +8,10 @@ from users.decorators import vendor_required
 from catalog.forms import (ProductForm,
                            PriceForm,
                            DimensionForm,
+                           ProductAttributeForm,
                            ProductDetailsForm,
                            ProductStockForm)
-from catalog.models import Product
+from catalog.models import Product, PredefineAttributeValue, ProductAttribute
 
 @login_required
 @vendor_required
@@ -106,3 +108,53 @@ def product_price(request, slug):
     context["form"] = form
     context["product"] = product
     return render(request, template_name, context)
+
+@login_required
+@vendor_required
+def product_attributes(request, slug):
+    template_name = 'products/product_attribute.html'
+    context = {}
+
+    if slug is None or slug == "":
+        return redirect('not-found')
+
+    product = Product.objects.get(slug=slug)
+
+    if product is None:
+        return redirect('not-found')
+
+    if not product.vendor == request.user.vendor:
+        return redirect('forbidden')
+    
+    attributes = ProductAttribute.objects.all()
+
+    # if request.method == 'POST':
+    #     form = ProductAttributeForm(request.POST or None, instance=product)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect(product.get_attribute_url())
+    # else:
+    #     form = ProductAttributeForm(instance=product)
+    # context["form"] = form
+
+    context["attributes"] = attributes
+    context["product"] = product
+    return render(request, template_name, context)
+
+@login_required
+@vendor_required
+def set_attribute_values(request, slug):
+    if slug is None or slug == "":
+        return Http404
+
+    product = Product.objects.get(slug=slug)
+
+    if product is None:
+        return Http404
+
+    if request.method == "POST" and request.is_ajax():
+        values = PredefineAttributeValue.objects.filter(id__in=request.POST.getlist('attribute_values'))
+        product.attributes.clear()
+        product.attributes.add(*values)
+        data = {'success': True, 'message': 'Attributes added to product.'}
+        return JsonResponse(data, status=200)
