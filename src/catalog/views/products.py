@@ -45,8 +45,8 @@ def create_product(request):
             product = form.save(commit=False)
             product.vendor = request.user.vendor
             product.acl = request.user.acl
+            product.album = Album.objects.create(name=product.name, owner=request.user)
             product.save()
-            Album.objects.create(name=product.name, owner=request.user)
             return redirect(product.get_absolute_url())
     else:
         form = ProductForm()
@@ -158,3 +158,13 @@ def set_attribute_values(request, slug):
         product.attributes.add(*values)
         data = {'success': True, 'message': 'Attributes added to product.'}
         return JsonResponse(data, status=200)
+
+@login_required
+def product_list(request):
+    template_name = 'products/product_list.html'
+    context = {}
+
+    products = Product.objects.all()
+    context['products'] = products
+
+    return render(request, template_name, context)

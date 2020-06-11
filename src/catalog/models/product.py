@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from django.db import models
+from django.conf import settings
 from django.shortcuts import reverse
 from django.utils.text import slugify
 
@@ -91,6 +92,10 @@ class Product(models.Model):
     def get_sales_price(self):
         sales_price = self.price - self.get_discount
         return sales_price
+
+    @property
+    def get_first_photo(self):
+        return f"{settings.MEDIA_URL}{self.album.photos.first()}"
 
     class Meta:
         verbose_name = 'product'

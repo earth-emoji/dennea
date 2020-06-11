@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="ui container">
+    <div class="ui padded grid">
+
+        <div class="row">
+            <div class="sixteen wide column">
+                <h1 class="ui dividing header">Products</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for product in products %}
+            <div class="four wide column">
+                <div class="ui segments">
+                    <div class="ui raised segment">
+                        <a class="ui red ribbon label">$ {{ product.price }}</a>
+                        <div class="image">
+                            <img class="ui fluid image" src="{{ product.get_first_photo }}">
+                        </div>
+                    </div>
+
+                    <div class="ui segment">
+                        <div class="ui header">{{ product.name }}</div>
+                        <p>{{ product.description|truncatechars:100 }}</p>
+                    </div>
+                    <div class="ui horizontal segments">
+                        <div class="ui segment">
+                            <p class="px-3 center aligned" style="font-size: large;"><i class="eye icon"></i></p>
+                        </div>
+                        <div class="ui segment">
+                            <p class="px-3 center aligned" style="font-size: large;"><i class="cart plus icon"></i></p>
+                        </div>
+                        <div class="ui segment">
+                            <p class="px-3 center aligned" style="font-size: large;"><i class="heart icon"></i></p>
+                        </div>
+                    </div>
+                    <!-- <div class="ui segment">
+                        <p>Bottom</p>
+                    </div> -->
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="ui fixed menu" style="border-bottom: 3px solid rgb(79,163,190);">
+<div class="ui fixed menu borderless" style="border-bottom: 3px solid rgb(79,163,190);">
     <div class="ui container">
         <a class="header item" href="{% url 'home' %}">
             <img class="logo" src="{% static 'images/aug-logo.png' %}" />
@@ -8,9 +8,12 @@
         </a>
         <a class="item" href="{% url 'home' %}">Home</a>
         {% if request.user.is_authenticated %}
-            <a class="item" href="#">Cart</a>
-            
-            <div class="ui simple dropdown item">
+            <a class="item">
+                <i class="icon cart"></i>
+                <div class="floating ui teal circular label" style="margin-top:1.2rem !important; margin-right:60em !important;">22</div>
+            </a>
+            <a class="item" href="{% url 'products:product-list' %}">Products</a>
+            <div class="ui simple dropdown item right aligned">
                 {{ request.user.name }} <i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" href="#">Profile</a>
