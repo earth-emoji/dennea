@@ -34,6 +34,6 @@ class VendorAdmin(admin.ModelAdmin):
         return obj.user.email
 
     def acl(self, obj):
-        return obj.user.acl.name
+        return obj.user.acl
 
 admin.site.register(Vendor, VendorAdmin)
