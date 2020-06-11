@@ -1,17 +1,20 @@
 <div class="three wide tablet only three wide computer only column" id="sidebar">
     <div class="ui black-russian vertical borderless fluid text menu">
-        <a class="active item">Overview</a> 
+        <a class="active item" href="{% url 'vendors:dashboard' request.user.vendor.slug %}">Overview</a> 
         <a href="{% url 'products:vendor-products' request.user.vendor.slug %}" class="item">Products</a>
-        <a href="#" class="item">Orders</a> 
-        <a class="item">Export</a>
+        <a href="#" class="item">Orders</a>
+        <a class="item">Customers</a>
         <div class="ui hidden divider"></div>
-        <a class="item">Nav item</a> 
-        <a class="item">Nav item again</a>
-        <a class="item">One more nav</a> 
-        <a class="item">Another nav item</a>
-        <a class="item">More navigation</a>
+        <a class="item">Sales</a>
+        <a class="item">Stats</a>
         <div class="ui hidden divider"></div>
-        <a class="item">Macintosh</a> <a class="item">Linux</a>
-        <a class="item">Windows</a>
+        <a class="item">Inventory</a>
+        <a class="item">Purchases</a>
+        <div class="ui hidden divider"></div>
+        <a class="item">Reviews</a>
+        <a class="item">Messages</a>
+        <div class="ui hidden divider"></div>
+        <a class="item">Product Listings</a>
+        <a href="{% url 'products:product-list' %}" class="item">Store Front</a>
     </div>
 </div>
