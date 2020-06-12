@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from accounts.models import Vendor, Customer
+from accounts.models import Vendor, Customer, Driver
 from catalog.models import Product
 from users.models import User
 
@@ -21,12 +21,73 @@ def get_user_pending_order(request):
         return order[0]
     return 0
 
-def get_vendor_pending_orders(request, slug, template_name='orders/vendor_pending_orders.html'):
+def get_vendor_pending_orders(request, slug):
+    template_name = 'orders/vendor_pending_orders.html'
     vendor = get_object_or_404(Vendor, user=request.user, slug=slug)
     orders = OrderItem.object.filter(vendor=vendor, is_fulfilled=False)
     data = {}
     data['orders'] = orders
     return render(request, template_name, data)
+
+@login_required()
+def get_driver_deliveries(request, slug):
+    template_name = 'orders/driver_deliveries.html'
+    driver = get_object_or_404(Driver, user=request.user, slug=slug)
+    orders = OrderItem.object.filter(driver=driver, is_fulfilled=False)
+    data = {}
+    data['orders'] = orders
+    return render(request, template_name, data)
+
+@login_required()
+def get_pending_orders(request):
+    template_name = 'orders/pending_orders.html'
+    orders = OrderItem.object.filter(is_fulfilled=False)
+    data = {}
+    data['orders'] = orders
+    return render(request, template_name, data)
+
+@login_required()
+def get_customer_pending_orders(request, slug):
+    template_name = 'orders/customer_pending_orders.html'
+    customer = Customer.objects.get(slug=slug)
+    orders = Order.object.filter(customer=customer, is_fulfilled=False)
+    data = {}
+    data['orders'] = orders
+    return render(request, template_name, data)
+
+@login_required()
+def order_details(request, slug):
+    template_name = 'orders/order_details.html'
+    context = {}
+    order = Order.object.get(slug=slug)
+    context["order"] = order
+    return render(request, template_name, context)
+
+@login_required()
+def get_customer_order_details(request, slug):
+    template_name = 'orders/customer_order_details.html'
+    order = OrderItem.object.get(slug=slug)
+    data = {}
+    data['order'] = order
+    return render(request, template_name, data)
+
+@login_required()
+def get_vendor_order_details(request, slug):
+    template_name = 'orders/customer_pending_orders.html'
+    order = OrderItem.object.get(slug=slug, vendor=request.user.vendor)
+    data = {}
+    data['order'] = order
+    return render(request, template_name, data)
+
+@login_required()
+def get_driver_order_details(request, slug):
+    template_name = 'orders/customer_pending_orders.html'
+    order = OrderItem.object.get(slug=slug, driver=request.user.driver)
+    data = {}
+    data['order'] = order
+    return render(request, template_name, data)
+
+
 
 @login_required()
 def add_to_cart(request, **kwargs):

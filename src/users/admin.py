@@ -11,7 +11,7 @@ class UserAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {'fields': ('company_name', 'email', 'photo', 'password')}),
         (_('Personal info'), {'fields': ('name', 'date_of_birth', 'sex')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_customer', 'is_vendor', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_customer', 'is_vendor', 'is_driver', 'is_staff', 'is_superuser',
                                        'acl', 'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -21,8 +21,8 @@ class UserAdmin(DjangoUserAdmin):
             'fields': ('company_name', 'email', 'name', 'photo', 'password1', 'password2'),
         }),
     )
-    list_display = ('company_name', 'email', 'name', 'acl', 'is_staff', 'is_customer', 'is_vendor',)
-    list_filter = ('is_staff', 'is_customer', 'is_vendor',)
+    list_display = ('company_name', 'email', 'name', 'acl', 'is_staff', 'is_customer', 'is_vendor', 'is_driver',)
+    list_filter = ('is_staff', 'is_customer', 'is_driver', 'is_vendor',)
     search_fields = ('company_name','email', 'name',)
     ordering = ('company_name',)
 

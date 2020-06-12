@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from accounts.models import Customer, Vendor
+from accounts.models import Customer, Vendor, Driver
 
 # Register your models here.
 class CustomerAdmin(admin.ModelAdmin):
@@ -37,3 +37,17 @@ class VendorAdmin(admin.ModelAdmin):
         return obj.user.acl
 
 admin.site.register(Vendor, VendorAdmin)
+
+class DriverAdmin(admin.ModelAdmin):
+    list_display = ('company_name', 'email', 'name',)
+
+    def name(self, obj):
+        return obj.user.name
+
+    def company_name(self, obj):
+        return obj.user.company_name
+
+    def email(self, obj):
+        return obj.user.email
+
+admin.site.register(Driver, DriverAdmin)

@@ -1,5 +1,4 @@
 CUSTOMER_TYPE_CHOICES = (
-    ('Dispensary', 'Dispensary'),
-    ('Grower', 'Grower'),
-    ('Processor', 'Processor'),
+    ('Individual-Buyer', 'Individual-Buyer'),
+    ('Wholesale-Buyer', 'Wholesale-Buyer'),
 )

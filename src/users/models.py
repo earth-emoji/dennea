@@ -45,6 +45,7 @@ class User(AbstractUser):
         Address, related_name='addresses', blank=True)
     is_vendor = models.BooleanField(default=False, blank=True)
     is_customer = models.BooleanField(default=False, blank=True)
+    is_driver = models.BooleanField(default=False, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'company_name']

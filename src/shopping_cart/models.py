@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 
 from catalog.models import Product
-from accounts.models import Vendor, Customer
+from accounts.models import Vendor, Customer, Driver
 
 # Create your models here.
 class Order(models.Model):
@@ -26,6 +26,7 @@ class OrderItem(models.Model):
     slug = models.SlugField(unique=True, default=uuid.uuid1, blank=True)
     product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
     vendor = models.ForeignKey(Vendor, related_name='order_items', on_delete=models.SET_NULL, null=True)
+    driver = models.ForeignKey(Driver, related_name='deliveries', on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE, blank=True)
     is_ordered = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
