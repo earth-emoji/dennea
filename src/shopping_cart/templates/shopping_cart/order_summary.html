@@ -39,7 +39,7 @@
                     <tr>
                         {% if order.get_cart_total != None %}
                         <td colspan=2>
-                            <strong class="pull-right">Order Total:</strong>
+                            <strong class="right aligned">Order Total:</strong>
                         </td>
 
                         <td colspan=1>
@@ -49,15 +49,18 @@
                     </tr>
                     <tr>
                         <td colspan=1>
-                            <a href="{% url 'products:product-list' %}" class="btn btn-warning pull-left">
+                            <a href="{% url 'products:product-list' %}" class="ui button teal left aligned">
                                 {% if order %}Continue Shopping{% else %}Add Items to Cart {% endif %}
                             </a>
                         </td>
                         <td colspan=2>
-                            {% comment %} {% if order.get_cart_items %}
-                            <a href="{% url 'shopping_cart:checkout' %}" class="pull-right btn btn-primary">Proceed To
-                                Checkout</a>
-                            {% endif %} {% endcomment %}
+                           <td colspan="2">
+                                {% if order.get_cart_items %}
+                                    <span class="ui right floated header">
+                                        <a href="{% url 'shopping_cart:purchase_success' %}" class="ui button primary">Proceed To Checkout</a>
+                                    </span>
+                                {% endif %}
+                            </td>
                         </td>
                     </tr>
                 </table>

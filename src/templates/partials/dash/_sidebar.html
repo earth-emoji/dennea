@@ -2,7 +2,7 @@
     <div class="ui black-russian vertical borderless fluid text menu">
         <a class="active item" href="{% url 'vendors:dashboard' request.user.vendor.slug %}">Overview</a> 
         <a href="{% url 'products:vendor-products' request.user.vendor.slug %}" class="item">Products</a>
-        <a href="#" class="item">Orders</a>
+        <a href="{% url 'orders:vendor-orders'  request.user.vendor.slug %}" class="item">Orders</a>
         <a class="item">Customers</a>
         <div class="ui hidden divider"></div>
         <a class="item">Sales</a>

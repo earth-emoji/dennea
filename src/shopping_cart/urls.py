@@ -9,7 +9,7 @@ from .views import (
     get_pending_orders,
     get_customer_pending_orders,
     get_driver_deliveries,
-    order_details,
+    get_order_details,
     get_customer_order_details,
     get_vendor_order_details,
     get_driver_order_details,
@@ -17,7 +17,7 @@ from .views import (
 
 urlpatterns = [
     path('cart/', include(([
-        path('add-to-cart/<int:item_id>/', add_to_cart, name="add_to_cart"),
+        path('add-to-cart/<slug:slug>/', add_to_cart, name="add_to_cart"),
         path('order-summary/', order_details, name="order_summary"),
         path('success/', purchase_success, name='purchase_success'),
         path('item/delete/<int:item_id>/', delete_from_cart, name='delete_item'),
@@ -27,7 +27,7 @@ urlpatterns = [
         path('vendor/<slug:slug>/', get_vendor_pending_orders, name='vendor-orders'),
         path('customer/<slug:slug>/', get_customer_pending_orders, name='customer-orders'),
         path('driver/<slug:slug>/', get_driver_deliveries, name='driver-orders'),
-        path('<slug:slug>/details', order_details, name='order-details'),
+        path('<slug:slug>/details', get_order_details, name='order-details'),
         path('<slug:slug>/customer-details', get_customer_order_details, name='customer-details'),
         path('<slug:slug>/vendor-details', get_vendor_order_details, name='vendor-details'),
         path('<slug:slug>/delivery-details', get_driver_order_details, name='driver-details'),

@@ -10,7 +10,7 @@ from catalog.models import Product
 from users.models import User
 
 from .extras import generate_order_id
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Basket
 
 def get_user_pending_order(request):
     # get order for the correct user
@@ -24,7 +24,7 @@ def get_user_pending_order(request):
 def get_vendor_pending_orders(request, slug):
     template_name = 'orders/vendor_pending_orders.html'
     vendor = get_object_or_404(Vendor, user=request.user, slug=slug)
-    orders = OrderItem.object.filter(vendor=vendor, is_fulfilled=False)
+    orders = OrderItem.objects.filter(vendor=vendor, is_ordered=True, is_fulfilled=False)
     data = {}
     data['orders'] = orders
     return render(request, template_name, data)
@@ -33,7 +33,7 @@ def get_vendor_pending_orders(request, slug):
 def get_driver_deliveries(request, slug):
     template_name = 'orders/driver_deliveries.html'
     driver = get_object_or_404(Driver, user=request.user, slug=slug)
-    orders = OrderItem.object.filter(driver=driver, is_fulfilled=False)
+    orders = OrderItem.objects.filter(driver=driver, is_fulfilled=False)
     data = {}
     data['orders'] = orders
     return render(request, template_name, data)
@@ -41,7 +41,7 @@ def get_driver_deliveries(request, slug):
 @login_required()
 def get_pending_orders(request):
     template_name = 'orders/pending_orders.html'
-    orders = OrderItem.object.filter(is_fulfilled=False)
+    orders = OrderItem.objects.filter(is_fulfilled=False)
     data = {}
     data['orders'] = orders
     return render(request, template_name, data)
@@ -50,69 +50,77 @@ def get_pending_orders(request):
 def get_customer_pending_orders(request, slug):
     template_name = 'orders/customer_pending_orders.html'
     customer = Customer.objects.get(slug=slug)
-    orders = Order.object.filter(customer=customer, is_fulfilled=False)
+    orders = Order.objects.filter(customer=customer, is_fulfilled=False)
     data = {}
     data['orders'] = orders
     return render(request, template_name, data)
 
 @login_required()
-def order_details(request, slug):
+def get_order_details(request, slug):
     template_name = 'orders/order_details.html'
     context = {}
-    order = Order.object.get(slug=slug)
+    order = Order.objects.get(slug=slug)
     context["order"] = order
     return render(request, template_name, context)
 
 @login_required()
 def get_customer_order_details(request, slug):
     template_name = 'orders/customer_order_details.html'
-    order = OrderItem.object.get(slug=slug)
+    order = OrderItem.objects.get(slug=slug)
     data = {}
     data['order'] = order
     return render(request, template_name, data)
 
 @login_required()
 def get_vendor_order_details(request, slug):
-    template_name = 'orders/customer_pending_orders.html'
-    order = OrderItem.object.get(slug=slug, vendor=request.user.vendor)
+    template_name = 'orders/vendor_order_details.html'
+    order = OrderItem.objects.get(slug=slug, vendor=request.user.vendor)
     data = {}
     data['order'] = order
     return render(request, template_name, data)
 
 @login_required()
 def get_driver_order_details(request, slug):
-    template_name = 'orders/customer_pending_orders.html'
-    order = OrderItem.object.get(slug=slug, driver=request.user.driver)
+    template_name = 'orders/driver_order_details.html'
+    order = OrderItem.objects.get(slug=slug, driver=request.user.driver)
     data = {}
     data['order'] = order
     return render(request, template_name, data)
 
-
-
-@login_required()
-def add_to_cart(request, **kwargs):
-    # get the user profile
+@login_required
+def add_to_cart(request, slug):
+    product = Product.objects.get(slug=slug)
     customer = get_object_or_404(Customer, user=request.user)
-    # filter products by id
-    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-    # check if the user already owns this product
-    # if product in request.user.profile.ebooks.all():
-    #     messages.info(request, 'You already own this ebook')
-    #     return redirect(reverse('products:product-list')) 
-    # create orderItem of the selected product
-    
-    # create order associated with the user
-    user_order, status = Order.objects.get_or_create(customer=customer, is_fulfilled=False)
-    order_item, status = OrderItem.objects.get_or_create(order=user_order, product=product, vendor=product.vendor)
-    # user_order.items.add(order_item)
-    if status:
-        # generate a reference code
-        user_order.ref_code = generate_order_id()
-        user_order.save()
 
-    # show confirmation message and redirect back to the same page
+    customer.basket.add_to_basket(product)
+
     messages.info(request, "item added to cart")
     return redirect('products:product-list')
+
+# @login_required()
+# def add_to_cart(request, **kwargs):
+#     # get the user profile
+#     customer = get_object_or_404(Customer, user=request.user)
+#     # filter products by id
+#     product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+#     # check if the user already owns this product
+#     # if product in request.user.profile.ebooks.all():
+#     #     messages.info(request, 'You already own this ebook')
+#     #     return redirect(reverse('products:product-list')) 
+#     # create orderItem of the selected product
+    
+#     # create order associated with the user
+#     user_order, status = Order.objects.get_or_create(customer=customer, is_fulfilled=False)
+#     order_item, status = OrderItem.objects.get_or_create(order=user_order, product=product, vendor=product.vendor)
+#     # user_order.items.add(order_item)
+#     if status:
+#         # generate a reference code
+#         user_order.ref_code = generate_order_id()
+#         user_order.save()
+
+    # show confirmation message and redirect back to the same page
+    # messages.info(request, "item added to cart")
+    # return redirect('products:product-list')
 
 @login_required()
 def delete_from_cart(request, item_id):
@@ -125,12 +133,14 @@ def delete_from_cart(request, item_id):
 
 @login_required()
 def order_details(request, template_name='shopping_cart/order_summary.html', **kwargs):
-    existing_order = get_user_pending_order(request)
+    customer = get_object_or_404(Customer, user=request.user)
     context = {
-        'order': existing_order
+        'order': customer.basket
     }
     return render(request, template_name, context)
 
-def purchase_success(request, **kwargs):
+def purchase_success(request):
     # a view signifying the transcation was successful
+    # order = Order.objects.get(slug=slug)
+    
     return render(request, 'shopping_cart/purchase_success.html', {})

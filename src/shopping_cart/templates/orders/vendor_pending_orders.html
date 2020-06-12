@@ -1,0 +1,36 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="ui container">
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <h1 class="ui header">Orders</div>
+
+            <table class="ui basic table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Customer</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.product.name }}</td>
+                            <td>{{ order.order.customer.get_name }}</td>
+                            <td>{{ order.product.price }}</td>
+                            <td>{{ order.date_added }}</td>
+                            <td><a href="#">Details</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
