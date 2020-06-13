@@ -43,6 +43,10 @@ class Customer(models.Model):
     def get_acl(self):
         return self.user.acl.name
 
+    @property
+    def get_basket_count(self):
+        return self.basket.items.count()
+
     def __str__(self):
         return self.user.email
 

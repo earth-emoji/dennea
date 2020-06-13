@@ -141,6 +141,14 @@ def order_details(request, template_name='shopping_cart/order_summary.html', **k
 
 def purchase_success(request):
     # a view signifying the transcation was successful
-    # order = Order.objects.get(slug=slug)
+    customer = Customer.objects.get(user=request.user)
+    order = Order.objects.create(customer=customer, ref_code=generate_order_id())
+
+    for item in customer.basket.get_cart_items():
+        item.order = order
+        item.is_ordered = True
+        item.save()
+
+    customer.basket.empty_basket()
     
     return render(request, 'shopping_cart/purchase_success.html', {})

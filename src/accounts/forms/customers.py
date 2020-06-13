@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from accounts.models import Customer
 from users.models import User
+from shopping_cart.models import Basket
 
 class CustomerSignUpForm(UserCreationForm):
     company_name = forms.CharField(min_length=1, max_length=30, widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Company Name'}))
@@ -18,6 +19,9 @@ class CustomerSignUpForm(UserCreationForm):
 
     # @transaction.atomic
     def save(self):
-        user = super().save()
-        Customer.objects.create(user=user)
+        user = super().save(commit=False)
+        user.is_customer = True
+        user.save()
+        customer = Customer.objects.create(user=user)
+        Basket.objects.create(customer=customer)
         return user

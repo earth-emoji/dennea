@@ -11,13 +11,9 @@
         {% if request.user.is_authenticated %}
             <a class="item" href="{% url 'shopping_cart:order_summary' %}">
                 <i class="icon cart"></i>
-                {% for order in request.user.customer.orders.all %}
-                    {% if order.is_fulfilled == False %}
-                        <div class="floating ui teal circular label" style="margin-top:1.2rem !important; margin-right:60em !important;">
-                        {{ request.user|cart_item_count }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                    <div class="floating ui teal circular label" style="margin-top:1.2rem !important; margin-right:60em !important;">
+                    {{ request.user.customer.get_basket_count }}
+                    </div>
             </a>
             <a class="item" href="{% url 'products:product-list' %}">Products</a>
             <div class="ui simple dropdown item right aligned">

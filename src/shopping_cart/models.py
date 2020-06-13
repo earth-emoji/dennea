@@ -36,15 +36,20 @@ class Order(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(self.customer, self.ref_code)
 
+    @property
+    def get_order_total(self):
+        return sum([item.product.price for item in self.items.all()])
+
 
 class OrderItem(models.Model):
     slug = models.SlugField(unique=True, default=uuid.uuid1, blank=True)
-    product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.SET_NULL, null=True, blank=True)
     basket = models.ForeignKey(Basket, on_delete=models.SET_NULL, related_name='items', null=True, blank=True)
     vendor = models.ForeignKey(Vendor, related_name='order_items', on_delete=models.SET_NULL, null=True, blank=True)
     driver = models.ForeignKey(Driver, related_name='deliveries', on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE, null=True, blank=True)
     is_fulfilled = models.BooleanField(default=False)
+    is_ordered = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
     date_ordered = models.DateTimeField(null=True)
 
