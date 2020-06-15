@@ -1,0 +1,18 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="ui container">
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <h1 class="ui header">Order</div>
+
+            <p>{{ order.product.name }}</p>
+            <p>{{ order.get_customer }}</p>
+            <p>{{ order.product.price }}</p>
+            <p>{{ order.date_added }}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

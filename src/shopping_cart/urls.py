@@ -27,10 +27,10 @@ urlpatterns = [
         path('vendor/<slug:slug>/', get_vendor_pending_orders, name='vendor-orders'),
         path('customer/<slug:slug>/', get_customer_pending_orders, name='customer-orders'),
         path('driver/<slug:slug>/', get_driver_deliveries, name='driver-orders'),
-        path('<slug:slug>/details', get_order_details, name='order-details'),
-        path('<slug:slug>/customer-details', get_customer_order_details, name='customer-details'),
-        path('<slug:slug>/vendor-details', get_vendor_order_details, name='vendor-details'),
-        path('<slug:slug>/delivery-details', get_driver_order_details, name='driver-details'),
+        path('<uuid:slug>/details', get_order_details, name='order-details'),
+        path('<uuid:slug>/customer-details', get_customer_order_details, name='customer-details'),
+        path('<uuid:slug>/vendor-details', get_vendor_order_details, name='vendor-details'),
+        path('<uuid:slug>/delivery-details', get_driver_order_details, name='driver-details'),
     ], 'orders'), namespace='orders')),
 ]
 

@@ -21,10 +21,10 @@
                     {% for order in orders %}
                         <tr>
                             <td>{{ order.product.name }}</td>
-                            <td>{{ order.order.customer.get_name }}</td>
+                            <td>{{ order.get_customer }}</td>
                             <td>{{ order.product.price }}</td>
                             <td>{{ order.date_added }}</td>
-                            <td><a href="#">Details</a></td>
+                            <td><a href="{% url 'orders:vendor-details' order.slug %}">Details</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

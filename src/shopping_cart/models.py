@@ -53,5 +53,9 @@ class OrderItem(models.Model):
     date_added = models.DateTimeField(auto_now=True)
     date_ordered = models.DateTimeField(null=True)
 
+    @property
+    def get_customer(self):
+        return self.order.customer.get_company_name
+
     def __str__(self):
         return self.product.name

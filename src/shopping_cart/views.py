@@ -66,7 +66,7 @@ def get_order_details(request, slug):
 @login_required()
 def get_customer_order_details(request, slug):
     template_name = 'orders/customer_order_details.html'
-    order = OrderItem.objects.get(slug=slug)
+    order = Order.objects.get(slug=slug)
     data = {}
     data['order'] = order
     return render(request, template_name, data)
@@ -148,6 +148,11 @@ def purchase_success(request):
         item.order = order
         item.is_ordered = True
         item.save()
+
+        product = item.product
+        product.sold = product.sold + 1
+        product.stock_quantity = product.stock_quantity - 1
+        product.save()
 
     customer.basket.empty_basket()
     

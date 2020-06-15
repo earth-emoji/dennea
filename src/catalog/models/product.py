@@ -94,6 +94,10 @@ class Product(models.Model):
         return sales_price
 
     @property
+    def get_sales(self):
+        return sum([item.product.price for item in self.order_items.all()])
+
+    @property
     def get_first_photo(self):
         return f"{settings.MEDIA_URL}{self.album.photos.first()}"
 
